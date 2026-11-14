@@ -1,0 +1,27 @@
+model_list:
+  # --- GROUP 1: NVIDIA (Bada Batch - 25 MCQ) ---
+  - model_name: "nvidia-bulk"
+    litellm_params:
+      model: "nvidia_nim/meta/llama-3.1-405b-instruct" 
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+
+  # --- GROUP 2: Backup Providers (Chote Batch - 5 MCQ) ---
+  - model_name: "backup-small"
+    litellm_params:
+      model: "groq/llama-3.1-70b-versatile"
+      api_key: os.environ/GROQ_API_KEY
+
+  - model_name: "backup-small"
+    litellm_params:
+      model: "gemini/gemini-1.5-flash"
+      api_key: os.environ/GEMINI_API_KEY
+
+  - model_name: "backup-small"
+    litellm_params:
+      model: "openrouter/meta-llama/llama-3.1-8b-instruct:free"
+      api_key: os.environ/OPENROUTER_API_KEY
+
+litellm_settings:
+  num_retries: 2
+  # Agar backup-small fail hota hai, toh usi group mein next provider (Gemini/OpenRouter) try karega
+  fallbacks: [{"backup-small": ["backup-small"]}] 

@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    container_name: litellm-gateway
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml
+    command: ["--config", "/app/config.yaml"]
+    env_file:
+      - .env
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    container_name: litellm-db
+    environment:
+      POSTGRES_USER: llmproxy
+      POSTGRES_PASSWORD: dbpassword9090
+      POSTGRES_DB: litellm
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
